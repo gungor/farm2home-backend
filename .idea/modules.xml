@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/gs-spring-boot-docker.iml" filepath="$PROJECT_DIR$/gs-spring-boot-docker.iml" />
+      <module fileurl="file://$PROJECT_DIR$/farm2home-backend.iml" filepath="$PROJECT_DIR$/farm2home-backend.iml" />
     </modules>
   </component>
 </project>
