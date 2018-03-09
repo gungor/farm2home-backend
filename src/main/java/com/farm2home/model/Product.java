@@ -8,6 +8,6 @@ public class Product {
     private String description;
     private String city;
     private Integer minAmount;
-
+    private Float price;
 
 }
