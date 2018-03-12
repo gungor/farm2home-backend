@@ -7,5 +7,8 @@ public class TableData {
 
     private Integer start;
     private Integer pageSize;
+    private String sortedColumn;
+    private Boolean desc;
+    private String itemType;
 
 }

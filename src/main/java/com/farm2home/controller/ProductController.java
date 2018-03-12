@@ -1,60 +1,49 @@
 package com.farm2home.controller;
 
-import com.farm2home.json.model.ProductData;
+import com.farm2home.json.model.ItemData;
 import com.farm2home.json.model.TableData;
-import com.farm2home.model.Product;
+import com.farm2home.model.MainModel;
+import com.farm2home.service.DataServiceProperty;
+import com.farm2home.service.GeneralDataService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 public class ProductController {
 
+    @Autowired
+    private GeneralDataService dataService;
+
     @CrossOrigin
-    @RequestMapping(value = "/", method = RequestMethod.POST,produces = "application/json")
+    @RequestMapping(value = "/items", method = RequestMethod.POST,produces = "application/json")
     @ResponseBody
-    public ProductData getNewestProducts(@RequestBody TableData tableData){
-        System.out.println( "start: "+ tableData.getStart() + " pageSize: "+ tableData.getPageSize() );
+    public ItemData getItems(@RequestBody TableData tableData){
+        System.out.println("start: " + tableData.getStart()
+                + " pageSize: " + tableData.getPageSize()
+                + " sortColumn:" + tableData.getSortedColumn()
+                + " desc:" + tableData.getDesc()
+                + " itemType: " + tableData.getItemType());
 
-        List<Product> productList = new ArrayList<>();
-        for(int i=0; i<35; i++ ){
-            Product product = new Product();
-            if( i< 12 ){
-                product.setName("Domates");
-                product.setCity("Antalya");
-                product.setMinAmount(5);
-                product.setPrice( 22.5f );
-            }else if( i < 24 ){
-                product.setName("Biber");
-                product.setCity("Çanakkale");
-                product.setMinAmount(5);
-                product.setPrice( 35.5f );
-            }else {
-                product.setName("Elma");
-                product.setCity("Muğla");
-                product.setMinAmount(5);
-                product.setPrice( 14f );
-            }
+        DataServiceProperty dataServiceProperty = dataService.getValue(tableData.getItemType());
 
-            productList.add( product );
-        }
+        String sortColumn = tableData.getSortedColumn() == null ? dataServiceProperty.getDefaultSortColumn() : tableData.getSortedColumn();
+        Sort.Direction direction =  tableData.getDesc() ? Sort.Direction.DESC : Sort.Direction.ASC;
+        int pageNumber = tableData.getStart() % tableData.getPageSize();
+
+        Page page = dataServiceProperty.getRepository().findAll( new PageRequest(pageNumber,tableData.getPageSize(), new Sort(direction, sortColumn) ) );
+        List<MainModel> itemList = page.getContent();
 
 
-        List<Product> pageProducts = new ArrayList<>();
+        ItemData itemData = new ItemData();
+        itemData.setProductList(itemList);
+        itemData.setSize( page.getTotalElements());
 
-        int start = tableData.getStart()*tableData.getPageSize();
-        int end =  Math.min(start + tableData.getPageSize(),productList.size()) ;
-
-        for(int i=start; i< end; i++ ){
-            pageProducts.add( productList.get(i) );
-        }
-
-        ProductData productData = new ProductData();
-        productData.setProductList(pageProducts);
-        productData.setSize( productList.size() );
-
-        return productData;
+        return itemData;
     }
 
 }
