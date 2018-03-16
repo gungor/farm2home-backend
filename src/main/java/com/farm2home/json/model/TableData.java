@@ -10,5 +10,6 @@ public class TableData {
     private String sortedColumn;
     private Boolean desc;
     private String itemType;
+    private ClientRequestObject clientRequestObject;
 
 }
