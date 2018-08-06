@@ -1,9 +1,0 @@
-Manifest-Version: 1.0
-Implementation-Title: Spring Boot Docker
-Implementation-Version: 0.1.0
-Implementation-Vendor-Id: org.springframework
-Build-Jdk: 1.8.0_60
-Built-By: gungoryz
-Created-By: IntelliJ IDEA
-Main-Class: ${start-class}
-

@@ -1,6 +1,5 @@
 package com.farm2home.config;
 
-import com.mongodb.Mongo;
 import com.mongodb.MongoClient;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
@@ -21,14 +20,18 @@ public class MongoConfig extends AbstractMongoConfiguration {
         return "farm2home";
     }
 
-    @Override
-    public Mongo mongo() throws Exception {
-        /*
-        return new MongoClient( Collections.singletonList(new ServerAddress("ds211029.mlab.com", 11029)),
-                Collections.singletonList(MongoCredential.createCredential("frm2home", "farm2home", "Tvazwq418".toCharArray())));
-        */
-        return new MongoClient( "localhost", 27017 );
-    }
+
+//    @Override
+//    public Mongo mongo() throws Exception {
+//
+//        /*
+//        return new MongoClient( Collections.singletonList(new ServerAddress("ds211029.mlab.com", 11029)),
+//                Collections.singletonList(MongoCredential.createCredential("frm2home", "farm2home", "Tvazwq418".toCharArray())));
+//
+//        */
+//        return new MongoClient( "localhost", 27017 );
+//    }
+
 
     @Bean
     public MappingMongoConverter mappingMongoConverter(MongoDbFactory factory, MongoMappingContext context, BeanFactory beanFactory) {
@@ -41,7 +44,11 @@ public class MongoConfig extends AbstractMongoConfiguration {
 
         // Don't save _class to mongo
         mappingConverter.setTypeMapper(new DefaultMongoTypeMapper(null));
-
         return mappingConverter;
+    }
+
+    @Override
+    public MongoClient mongoClient() {
+        return new MongoClient( "localhost", 27017 );
     }
 }
